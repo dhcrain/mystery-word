@@ -1,5 +1,6 @@
 # import my_functions
 import random
+import sys
 
 with open('/usr/share/dict/words') as opened_file:
     word_list = opened_file.readlines()
@@ -13,21 +14,23 @@ guess_count = 0
 bad_guesses = []
 good_guesses = []
 
-while guess_count <= guess_max:
-    print("".join(word) + ":remove after testing")
-
+def display_word():
+    win_t = 0
     for letter in word:
         if letter in good_guesses:
             print(letter, end=" ")
         else:
             print("_", end=" ")
-        if letter not in word:
-            print("win")
-            break
+            win_t += 1
+    if win_t == 0:
+        print("\n***** Winner *****")
+        sys.exit()
 
-    # if len(good_guesses) == len(word):
-    #     print("You win!")
-    #     break
+
+while guess_count <= guess_max:
+    print("".join(word) + ":remove after testing")
+
+    display_word()
 
     print("\nBad Guesses [{}/{}]".format(guess_count, guess_max))
     for letter in bad_guesses:
@@ -35,6 +38,7 @@ while guess_count <= guess_max:
             print(letter, end=" ")
 
     letter = input("\n" + "_" * 40 + "\nGuess a letter: ").upper()
+
     if len(letter) != 1:
         print("You can only guess one letter at a time!\n")
     elif letter in bad_guesses or letter in good_guesses:
@@ -49,7 +53,10 @@ while guess_count <= guess_max:
             print("Bad Guess!\n")
             bad_guesses.append(letter)
             guess_count += 1
-        if guess_count == guess_max:
-            print("You Loose! The mystery word was {}".format(("".join(word))))
-            break
 
+        if guess_count == guess_max:
+            print("\nYou Loose! The mystery word was {}".format(("".join(word))))
+            break
+        # else:
+        #     print("\nWIN!")
+        #     break
