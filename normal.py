@@ -14,45 +14,11 @@ def clear():
         os.system("clear")
 
 
-def welcome():
-    print("Welcome to Mystery Word!\n"
-          "Choose the game level:\n"
-          "1. Easy   - Words 4-6 letters long\n"
-          "2. Medium - Words 6-10 letters long\n"
-          "3. Hard   - Words longer than 10 letters")
-    level = input("Choose 1, 2, 3: ")
-    return level
-
-
-def rand_word():
-    word = random.choice(word_list).upper()
-    word = word.replace("\n", "")
-    word = list(word)
-    return word
-
-
-def choose_level():
-    level = welcome()
-    word = rand_word()
-    if level == "1":
-        if word in range(4, 7):  # len(word) >= 4 and len(word) <= 6:
-            return word
-            game()
-        else:
-            rand_word()
-    elif level == "2":
-        rand_word()
-    elif level == "3":
-        rand_word()
-    else:
-        print("Must choose 1, 2, or 3 please.\n")
-        game()
-
-
 def game():
-    word = choose_level()
+    clear()
 
     def display_word():
+        # clear()
         win_t = 0
         for letter in word:
             if letter in good_guesses:
@@ -64,13 +30,18 @@ def game():
             print("\n***** Winner *****")
             play_again()
 
+    word = random.choice(word_list).upper()
+    word = word.replace("\n", "")
+    word = list(word)
     guess_max = 8
     bad_guesses = []
     good_guesses = []
     guess_count = 0
+    print("Welcome to Mystery Word!\n"
+          "You task is to guess the word in the blanks ({} letters long)\n".format(len(word)))
     while guess_count <= guess_max:
-        print(str(word) + ":remove after testing")
-        print("\nYou task is to guess the word in the blanks ({} letters long)\n".format(len(word)))
+        print("".join(word) + ":remove after testing")
+
         display_word()
 
         print("\nBad Guesses [{}/{}]".format(guess_count, guess_max))
