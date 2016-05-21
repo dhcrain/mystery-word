@@ -1,10 +1,32 @@
-# import my_functions
 import random
 import sys
 import os
 
 with open('/usr/share/dict/words') as opened_file:
-    word_list = opened_file.readlines()
+    word_list = list(opened_file.readlines())
+
+easy_min = 5
+easy_max = 7
+med_min = 6
+med_max = 10
+hard_min = 10
+hard_max = 99
+
+# make 3 lists
+easy_list = []
+med_list = []
+hard_list = []
+for words in word_list:
+    # PyCharm tells me I can simplify this comparison, but I cant seem to get it work; if min <= len(words) >= max:
+    # easy list
+    if len(words) >= easy_min and len(words) <= easy_max:
+        easy_list.append(words.replace("\n", ""))
+    # med list
+    if len(words) >= med_min and len(words) <= med_max:
+        med_list.append(words.replace("\n", ""))
+    # hard list
+    if len(words) >= hard_min and len(words) <= hard_max:
+        hard_list.append(words.replace("\n", ""))
 
 
 def clear():
@@ -14,43 +36,43 @@ def clear():
         os.system("clear")
 
 
+def play_again():
+    if input("Do you want to play again? Y/n ").lower() != "n":
+        game()
+    else:
+        sys.exit()
+
+
 def welcome():
+    pass
+
+
+def rand_word(level_word_list):
+    word = random.choice(level_word_list).upper()
+    word = word.replace("\n", "")
+    word = list(word)
+    return word
+
+
+def game():
+
+    # Get a level choice
     print("Welcome to Mystery Word!\n"
           "Choose the game level:\n"
           "1. Easy   - Words 4-6 letters long\n"
           "2. Medium - Words 6-10 letters long\n"
           "3. Hard   - Words longer than 10 letters")
     level = input("Choose 1, 2, 3: ")
-    return level
 
-
-def rand_word():
-    word = random.choice(word_list).upper()
-    word = word.replace("\n", "")
-    word = list(word)
-    return word
-
-
-def choose_level():
-    level = welcome()
-    word = rand_word()
     if level == "1":
-        if word in range(4, 7):  # len(word) >= 4 and len(word) <= 6:
-            return word
-            game()
-        else:
-            rand_word()
+        word = rand_word(easy_list)
     elif level == "2":
-        rand_word()
+        word = rand_word(med_list)
     elif level == "3":
-        rand_word()
+        word = rand_word(hard_list)
     else:
         print("Must choose 1, 2, or 3 please.\n")
-        game()
-
-
-def game():
-    word = choose_level()
+        play_again()
 
     def display_word():
         win_t = 0
@@ -68,9 +90,12 @@ def game():
     bad_guesses = []
     good_guesses = []
     guess_count = 0
+
     while guess_count <= guess_max:
-        print(str(word) + ":remove after testing")
-        print("\nYou task is to guess the word in the blanks ({} letters long)\n".format(len(word)))
+
+        # print(str(word) + ":remove after testing")
+
+        print("\nYou task is to guess the word in the blanks.")
         display_word()
 
         print("\nBad Guesses [{}/{}]".format(guess_count, guess_max))
@@ -98,12 +123,5 @@ def game():
             if guess_count == guess_max:
                 print("\nYou Loose! The mystery word was {}".format(("".join(word))))
                 play_again()
-
-
-def play_again():
-    if input("Do you want to play again? Y/n ").lower() != "n":
-        game()
-    else:
-        sys.exit()
 
 game()
