@@ -1,6 +1,5 @@
 import random
 import sys
-import os
 
 with open('/usr/share/dict/words') as opened_file:
     word_list = list(opened_file.readlines())
@@ -29,22 +28,11 @@ for words in word_list:
         hard_list.append(words.replace("\n", ""))
 
 
-def clear():
-    if os.name == "nt":
-        os.system("cls")
-    else:
-        os.system("clear")
-
-
 def play_again():
     if input("Do you want to play again? Y/n ").lower() != "n":
         game()
     else:
         sys.exit()
-
-
-def welcome():
-    pass
 
 
 def rand_word(level_word_list):
@@ -55,7 +43,6 @@ def rand_word(level_word_list):
 
 
 def game():
-
     # Get a level choice
     print("Welcome to Mystery Word!\n"
           "Choose the game level:\n"
@@ -83,19 +70,20 @@ def game():
                 print("_", end=" ")
                 win_t += 1
         if win_t == 0:
-            print("\n***** Winner *****")
+            print(" _ _ _  _\n"
+                  "| | | |<_>._ _ ._ _  ___  _ _\n"
+                  "| | | || || ' || ' |/ ._>| '_>\n"
+                  "|__/_/ |_||_|_||_|_|\___.|_|\n"
+                  "                              \n")
             play_again()
 
     guess_max = 8
+    guess_count = 0
     bad_guesses = []
     good_guesses = []
-    guess_count = 0
 
     while guess_count <= guess_max:
-
-        # print(str(word) + ":remove after testing")
-
-        print("\nYou task is to guess the word in the blanks.")
+        print("\nGuess the word in the blanks.\n")
         display_word()
 
         print("\nBad Guesses [{}/{}]".format(guess_count, guess_max))
@@ -103,25 +91,26 @@ def game():
             if letter in bad_guesses:
                 print(letter, end=" ")
 
-        letter = input("\n" + "_" * 40 + "\nGuess a letter: ").upper()
+        letter = input("\n" + "_" * 40 + "\n\nGuess a letter: ").upper()
 
         if len(letter) != 1:
             print("You can only guess one letter at a time!\n")
         elif letter in bad_guesses or letter in good_guesses:
             print("You already guessed that one!\n")
         elif not letter.isalpha():
-            print("That's not a letter!\n")
+            print("That's not a letter!")
         else:
             if letter in word:
-                print("Good Guess!\n")
+                print(" *** Good Guess! *** ")
                 good_guesses.append(letter)
             else:
-                print("Bad Guess!\n")
+                print(" *** Bad Guess! *** ")
+
                 bad_guesses.append(letter)
                 guess_count += 1
 
             if guess_count == guess_max:
-                print("\nYou Loose! The mystery word was {}".format(("".join(word))))
+                print(" *** You Loose! The mystery word was {} *** \n".format(("".join(word))))
                 play_again()
 
 game()
